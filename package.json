@@ -5,6 +5,9 @@
 	"author": "Jelle De Loecker <jelle@kipdola.be>",
 	"keywords": ["flow-control", "asynchronous", "asyncify", "async", "callback", "fork", "child_process"],
 	"main": "./lib/forkify.js",
+	"dependencies": {
+		"toobusy-js": "~0.4.2"
+	},
 	"repository": "git@github.com:skerit/forkify.git",
 	"license": "MIT",
 	"engines": {

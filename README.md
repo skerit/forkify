@@ -8,9 +8,10 @@ Forkify lets you run functions in a forked child process
 $ npm install forkify
 ```
 
-## Todo
+## Features
 
-* Starting multiple instances
+* Distribute executions over multiple instances
+* Create new instances when existing ones are too busy
 
 ## Examples
 
@@ -43,6 +44,24 @@ fibonacci(10, function gotResult(err, result) {
     console.log('Fibonacci result:', err, result);
 });
 
+```
+
+### Set instance pool size
+
+By default, up to 3 instances are created. This can be modified at any time like this:
+
+```javascript
+var forkify = require('forkify');
+forkify.limit = 5;
+```
+
+### Create a new forkify pool
+
+If you want to create a separate pool, you can do so like this:
+
+```javascript
+var forkify = require('forkify');
+var forkify2 = forkify.constructor();
 ```
 
 ## Caveats
