@@ -12,6 +12,8 @@ $ npm install forkify
 
 * Distribute executions over multiple instances
 * Create new instances when existing ones are too busy
+* Buffers are sent over a separate stream to bypass costly JSON serialization
+* Idle instances are reaped (by default after 30 seconds)
 
 ## Examples
 
@@ -43,7 +45,28 @@ var fibonacci = forkify(function generateFibonacci(amount, callback) {
 fibonacci(10, function gotResult(err, result) {
     console.log('Fibonacci result:', err, result);
 });
+```
 
+### Work with buffers
+
+You can pass Buffer instances back and forth, without problems.
+These are not serialized using JSON, as that is a costly affair.
+Unfortunately, they are also not using "shared memory", rather the buffer contents are sent to the child over an extra stream.
+
+```javascript
+
+var workWithBuffers = forkify(function(buffer, callback) {
+
+    // Outputs 6 in this case
+    console.log(buffer.length);
+
+    callback(null, new Buffer(40));
+});
+
+workWithBuffers(new Buffer(6), function(err, buffer) {
+    // Outputs 40 in this case
+    console.log(buffer.length);
+});
 ```
 
 ### Set instance pool size
@@ -51,7 +74,6 @@ fibonacci(10, function gotResult(err, result) {
 By default, up to 3 instances are created. This can be modified at any time like this:
 
 ```javascript
-var forkify = require('forkify');
 forkify.limit = 5;
 ```
 
@@ -60,15 +82,27 @@ forkify.limit = 5;
 If you want to create a separate pool, you can do so like this:
 
 ```javascript
-var forkify = require('forkify');
 var forkify2 = forkify.constructor();
 ```
+
+### Set minimum idle time before reaping
+
+Forks are killed after idling for at least 30 seconds.
+This can be changed by setting the `idle` property:
+
+```javascript
+forkify.idle = 45000; // 45 seconds
+```
+
+Do note: For now, the reaping function only runs once every 10 seconds.
 
 ## Caveats
 
 `forkify` functions run in a new scope and can not access anything outside of it, you will have to re-`require` modules you wish to use inside the function.
 
-Arguments passed to the forkified function are converted using JSON-dry (which supports Dates, Infinity, Errors, ...)
+Arguments passed to the forkified function are converted using a modified version of JSON-DRY (which supports Dates, Infinity, Errors, Buffers, ...)
+
+Because of the addition of Buffer support `forkify` will keep your application running until all instances have been reaped.
 
 ## License
 
