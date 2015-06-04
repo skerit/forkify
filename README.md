@@ -12,8 +12,16 @@ $ npm install forkify
 
 * Distribute executions over multiple instances
 * Create new instances when existing ones are too busy
-* Buffers are sent over a separate stream to bypass costly JSON serialization
+* Buffers & streams are sent over a separate socket
+  to bypass costly JSON serialization
 * Idle instances are reaped (by default after 30 seconds)
+* Events can be emitted from the fork
+
+## Todo
+
+* You should also be able to send events to the fork
+* Emitted event arguments should be serialized through the same process as
+  a function execution or callback, so buffers & streams can also be emitted
 
 ## Examples
 

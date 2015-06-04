@@ -1,7 +1,7 @@
 {
 	"name": "forkify",
 	"description": "Run synchronous functions inside a forked child process",
-	"version": "0.1.1",
+	"version": "0.1.3",
 	"author": "Jelle De Loecker <jelle@kipdola.be>",
 	"keywords": ["flow-control", "asynchronous", "asyncify", "async", "callback", "fork", "child_process"],
 	"main": "./lib/forkify.js",
