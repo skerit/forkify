@@ -1,3 +1,8 @@
+## 0.1.4 (WIP)
+
+* Add `weak` dependency to prevent memory leaks
+* 
+
 ## 0.1.3 (2015-06-04)
 
 * Unix sockets are used instead of the extra spawned fd,
